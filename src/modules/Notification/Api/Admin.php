@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -51,7 +51,7 @@ class Admin extends \Api_Abstract
         $this->di['validator']->checkRequiredParamsForArray($required, $data);
 
         $meta = $this->di['db']->load('extension_meta', $data['id']);
-        if ('mod_notification' != $meta->extension || 'message' != $meta->meta_key) {
+        if ($meta->extension != 'mod_notification' || $meta->meta_key != 'message') {
             throw new \Box_Exception('Notification message was not found');
         }
 
@@ -93,7 +93,7 @@ class Admin extends \Api_Abstract
         $this->di['validator']->checkRequiredParamsForArray($required, $data);
 
         $meta = $this->di['db']->load('extension_meta', $data['id']);
-        if ('mod_notification' != $meta->extension || 'message' != $meta->meta_key) {
+        if ($meta->extension != 'mod_notification' || $meta->meta_key != 'message') {
             throw new \Box_Exception('Notification message was not found');
         }
         $this->di['db']->trash($meta);

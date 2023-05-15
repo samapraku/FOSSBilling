@@ -2,16 +2,15 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
  */
-
 const DIR_SEP = DIRECTORY_SEPARATOR;
 
 /**
- * Patch to remove the old FileCache class that was replaced with Symfony's Cache component
+ * Patch to remove the old FileCache class that was replaced with Symfony's Cache component.
  *
  * @see https://github.com/FOSSBilling/FOSSBilling/pull/1184
  */
@@ -27,7 +26,7 @@ class FOSSPatch_33 extends FOSSPatchAbstract
 }
 
 /**
- * Patch to remove the old phpmailer package, some leftover admin_default files, and old Box_ classes we've removed or replaced
+ * Patch to remove the old phpmailer package, some leftover admin_default files, and old Box_ classes we've removed or replaced.
  *
  * @see https://github.com/FOSSBilling/FOSSBilling/pull/1091 and https://github.com/FOSSBilling/FOSSBilling/pull/1063
  */
@@ -58,7 +57,7 @@ class FOSSPatch_32 extends FOSSPatchAbstract
 }
 
 /**
- * Patch to remove the old htaccess.txt file, any old config.php backup
+ * Patch to remove the old htaccess.txt file, any old config.php backup.
  *
  * @see https://github.com/FOSSBilling/FOSSBilling/pull/1075
  */
@@ -108,7 +107,7 @@ class FOSSPatch_29 extends FOSSPatchAbstract
 }
 
 /**
- * Patch to remove .html from email templates action code, see https://github.com/FOSSBilling/FOSSBilling/issues/863
+ * Patch to remove .html from email templates action code, see https://github.com/FOSSBilling/FOSSBilling/issues/863.
  */
 class FOSSPatch_28 extends FOSSPatchAbstract
 {
@@ -120,14 +119,14 @@ class FOSSPatch_28 extends FOSSPatchAbstract
 }
 
 /**
- * Migration steps to create table to allow admin users to do password reset
+ * Migration steps to create table to allow admin users to do password reset.
  */
 class FOSSPatch_27 extends FOSSPatchAbstract
 {
     public function patch()
     {
         // create admin password reset table
-        $q = "CREATE TABLE `admin_password_reset` ( `id` bigint(20) NOT NULL AUTO_INCREMENT, `admin_id` bigint(20) DEFAULT NULL, `hash` varchar(100) DEFAULT NULL, `ip` varchar(45) DEFAULT NULL, `created_at` datetime DEFAULT NULL, `updated_at` datetime DEFAULT NULL, PRIMARY KEY (`id`), KEY `admin_id_idx` (`admin_id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+        $q = 'CREATE TABLE `admin_password_reset` ( `id` bigint(20) NOT NULL AUTO_INCREMENT, `admin_id` bigint(20) DEFAULT NULL, `hash` varchar(100) DEFAULT NULL, `ip` varchar(45) DEFAULT NULL, `created_at` datetime DEFAULT NULL, `updated_at` datetime DEFAULT NULL, PRIMARY KEY (`id`), KEY `admin_id_idx` (`admin_id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8;';
         $this->execSql($q);
     }
 }
@@ -139,7 +138,7 @@ class FOSSPatch_26 extends FOSSPatchAbstract
 {
     public function patch()
     {
-        //Added favicon settings
+        // Added favicon settings
         $q = "INSERT INTO setting ('id', 'param', 'value', 'public', 'category', 'hash', 'created_at', 'updated_at') VALUES (29,'company_favicon','themes/huraga/assets/favicon.ico',0,NULL,NULL,'2023-01-08 12:00:00','2023-01-08 12:00:00');";
         $this->execSql($q);
     }
@@ -149,7 +148,7 @@ class FOSSPatch_25 extends FOSSPatchAbstract
 {
     public function patch()
     {
-        //Migrate email templates to be compatible with Twig 3.x
+        // Migrate email templates to be compatible with Twig 3.x
         $q = "UPDATE email_template SET content = REPLACE(content, '{% filter markdown %}', '{% apply markdown %}')";
         $this->execSql($q);
 
@@ -183,6 +182,7 @@ abstract class FOSSPatchAbstract
     protected function execSql($sql): void
     {
         $stmt = $this->pdo->prepare($sql);
+
         try {
             $stmt->execute();
         } catch (Exception $e) {
@@ -222,7 +222,7 @@ abstract class FOSSPatchAbstract
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(['param' => $param]);
         $r = $stmt->fetchColumn();
-        if (false === $r) {
+        if ($r === false) {
             return $default;
         }
 
@@ -242,7 +242,7 @@ abstract class FOSSPatchAbstract
                 $this->fileActions[] = "<strong>Deleted:</strong> <em>$relPath</em>";
             } elseif (file_exists($file)) {
                 @rename($file, $action);
-                $this->fileActions[] = "<strong>Moved:</strong> <em>$relPath</em> to <em>" . str_replace(__DIR__, '', $action . "</em>");
+                $this->fileActions[] = "<strong>Moved:</strong> <em>$relPath</em> to <em>" . str_replace(__DIR__, '', $action . '</em>');
             }
         }
     }
@@ -261,7 +261,7 @@ abstract class FOSSPatchAbstract
             $di = new RecursiveDirectoryIterator($folder, FilesystemIterator::SKIP_DOTS);
             $ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
             foreach ($ri as $file) {
-                $file->isDir() ?  rmdir($file->getRealPath()) : unlink($file->getRealPath());
+                $file->isDir() ? rmdir($file->getRealPath()) : unlink($file->getRealPath());
             }
         }
     }
@@ -345,9 +345,9 @@ natsort($patches);
 
                         $version = $p->getVersion();
                         $fileActions = $p->getFileActions();
-                ?>
+                        ?>
                         <tr>
-                            <td><?php echo $version ?></td>
+                            <td><?php echo $version; ?></td>
                             <td>Executed</td>
                             <td>
                                 <ul>
@@ -362,7 +362,7 @@ natsort($patches);
                 } ?>
             </tbody>
         </table>
-        <p>Update completed. You are using FOSSBilling <strong><?php echo \FOSSBilling\Version::VERSION ?></strong></p>
+        <p>Update completed. You are using FOSSBilling <strong><?php echo \FOSSBilling\Version::VERSION; ?></strong></p>
     </div>
 </body>
 

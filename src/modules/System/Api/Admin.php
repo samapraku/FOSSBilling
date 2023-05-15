@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -164,7 +164,6 @@ class Admin extends \Api_Abstract
         return $updater->getLatestReleaseNotes();
     }
 
-
     /**
      * Update FOSSBilling core.
      *
@@ -175,7 +174,7 @@ class Admin extends \Api_Abstract
     public function update_core($data)
     {
         $updater = $this->di['updater'];
-        if ('preview' !== $updater->getUpdateBranch() && !$updater->getCanUpdate()) {
+        if ($updater->getUpdateBranch() !== 'preview' && !$updater->getCanUpdate()) {
             throw new \Box_Exception('You have latest version of FOSSBilling. You do not need to update.', null, 930);
         }
 

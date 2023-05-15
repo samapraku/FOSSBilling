@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -82,7 +82,7 @@ class Client extends \Api_Abstract
         if (!$invoice) {
             throw new \Box_Exception('Invoice was not found');
         }
-        if ('paid' == $invoice->status) {
+        if ($invoice->status == 'paid') {
             throw new \Box_Exception('Paid Invoice can not be modified');
         }
 

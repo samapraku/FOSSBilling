@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -165,6 +165,7 @@ class Admin extends \Api_Abstract
         $file_handle = fopen($lock_file, 'r+');
         if (!flock($file_handle, LOCK_EX | LOCK_NB)) {
             $this->di['logger']->info(sprintf('Queue %s is being executed by other process.', $q->id));
+
             throw new \Exception('This queue is being executed by other process.');
         }
         $this->di['logger']->info('Locked queue: ' . $q->id);

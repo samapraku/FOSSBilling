@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -32,6 +34,7 @@ $di = new \Pimple\Container();
  */
 $di['config'] = function () {
     $array = include PATH_ROOT . '/config.php';
+
     return $array;
 };
 
@@ -107,7 +110,7 @@ $di['pdo'] = function () use ($di) {
         $pdo->setAttribute(PDO::ATTR_STATEMENT_CLASS, ['Box_DbLoggedPDOStatement']);
     }
 
-    if ('mysql' === $c['type']) {
+    if ($c['type'] === 'mysql') {
         $pdo->exec('SET NAMES "utf8"');
         $pdo->exec('SET CHARACTER SET utf8');
         $pdo->exec('SET CHARACTER_SET_CONNECTION = utf8');
@@ -318,19 +321,19 @@ $di['twig'] = $di->factory(function () use ($di) {
         if (($config['i18n']['locale'] ?? 'en_US') == 'en_US') {
             $dateFormatter = new \IntlDateFormatter('en', constant("\IntlDateFormatter::$date_format"), constant("\IntlDateFormatter::$time_format"), $timezone, null, $datetime_pattern);
         } else {
-            throw new \Box_Exception("It appears you are trying to use FOSSBilling without the php intl extension enabled. FOSSBilling includes a polyfill for the intl extension, however it does not support :locale. Please enable the intl extension.", [':locale' => $config['i18n']['locale']]);
+            throw new \Box_Exception('It appears you are trying to use FOSSBilling without the php intl extension enabled. FOSSBilling includes a polyfill for the intl extension, however it does not support :locale. Please enable the intl extension.', [':locale' => $config['i18n']['locale']]);
         }
     }
 
     $twig->addExtension(new IntlExtension($dateFormatter));
 
     // add globals
-    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'XMLHttpRequest' === $_SERVER['HTTP_X_REQUESTED_WITH']) {
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
         $_GET['ajax'] = true;
     }
 
     // CSRF token
-    if (PHP_SESSION_ACTIVE !== session_status()) {
+    if (session_status() !== PHP_SESSION_ACTIVE) {
         $token = hash('md5', $_COOKIE['PHPSESSID'] ?? '');
     } else {
         $token = hash('md5', session_id());
@@ -339,6 +342,7 @@ $di['twig'] = $di->factory(function () use ($di) {
     $twig->addGlobal('CSRFToken', $token);
     $twig->addGlobal('request', $_GET);
     $twig->addGlobal('guest', $di['api_guest']);
+
     return $twig;
 });
 
@@ -358,7 +362,7 @@ $di['is_client_logged'] = function () use ($di) {
         $api_str = '/api/';
         $url = $_GET['_url'] ?? ($_SERVER['PATH_INFO'] ?? '');
 
-        if (0 === strncasecmp($url, $api_str, strlen($api_str))) {
+        if (strncasecmp($url, $api_str, strlen($api_str)) === 0) {
             // Throw Exception if api request
             throw new Exception('Client is not logged in');
         } else {
@@ -386,7 +390,7 @@ $di['is_admin_logged'] = function () use ($di) {
         $api_str = '/api/';
         $url = $_GET['_url'] ?? ($_SERVER['PATH_INFO'] ?? '');
 
-        if (0 === strncasecmp($url, $api_str, strlen($api_str))) {
+        if (strncasecmp($url, $api_str, strlen($api_str)) === 0) {
             // Throw Exception if api request
             throw new Exception('Admin is not logged in');
         } else {
@@ -423,7 +427,7 @@ $di['loggedin_client'] = function () use ($di) {
  * @throws \Box_Exception If the script is running in CLI or CGI mode and there is no cron admin available.
  */
 $di['loggedin_admin'] = function () use ($di) {
-    if ('cli' === php_sapi_name() || !http_response_code()) {
+    if (php_sapi_name() === 'cli' || !http_response_code()) {
         return $di['mod_service']('staff')->getCronAdmin();
     }
 
@@ -604,7 +608,7 @@ $di['server_account'] = function () {
  *
  * @return \Server_Manager The new server manager object that was just created.
  */
-$di['server_manager'] = $di->protect(function($manager, $config) use ($di) {
+$di['server_manager'] = $di->protect(function ($manager, $config) use ($di) {
     $class = sprintf('Server_Manager_%s', ucfirst($manager));
 
     $s = new $class($config);
@@ -752,7 +756,7 @@ $di['translate'] = $di->protect(function ($textDomain = '') use ($di) {
  */
 $di['table_export_csv'] = $di->protect(function (string $table, string $outputName = 'export.csv', array $headers = [], int $limit = 0) use ($di) {
     if ($limit > 0) {
-        $beans = $di['db']->findAll($table, "LIMIT :limit", array(':limit' => $limit));
+        $beans = $di['db']->findAll($table, 'LIMIT :limit', [':limit' => $limit]);
     } else {
         $beans = $di['db']->findAll($table);
     }
@@ -778,7 +782,7 @@ $di['table_export_csv'] = $di->protect(function (string $table, string $outputNa
     $csv->output($outputName);
 
     // Prevent further output from being added to the end of the CSV
-    die();
+    exit;
 });
 
 return $di;

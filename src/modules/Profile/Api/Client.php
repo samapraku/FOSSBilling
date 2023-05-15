@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -94,7 +94,7 @@ class Client extends \Api_Abstract
 
     /**
      * Change password for currently logged in client.
-     * 
+     *
      * @param string $current_password - client current password
      * @param string $new_password     - client new password
      * @param string $confirm_password - client new password confirmation
@@ -102,7 +102,6 @@ class Client extends \Api_Abstract
      * @return bool
      *
      * @throws \Box_Exception
-     * 
      */
     public function change_password($data)
     {
@@ -120,7 +119,7 @@ class Client extends \Api_Abstract
 
         $client = $this->getIdentity();
 
-        if(!$this->di['password']->verify($data['current_password'], $client->pass)) {
+        if (!$this->di['password']->verify($data['current_password'], $client->pass)) {
             throw new \Exception('Current password incorrect');
         }
 

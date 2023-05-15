@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -140,7 +140,7 @@ class Admin extends \Api_Abstract
     {
         $order = $this->_getOrder($data);
 
-        if (\Model_ClientOrder::STATUS_PENDING_SETUP == $order->status || \Model_ClientOrder::STATUS_FAILED_SETUP == $order->status) {
+        if ($order->status == \Model_ClientOrder::STATUS_PENDING_SETUP || $order->status == \Model_ClientOrder::STATUS_FAILED_SETUP) {
             return $this->activate($data);
         }
 
@@ -177,7 +177,7 @@ class Admin extends \Api_Abstract
     public function unsuspend($data)
     {
         $order = $this->_getOrder($data);
-        if (\Model_ClientOrder::STATUS_SUSPENDED != $order->status) {
+        if ($order->status != \Model_ClientOrder::STATUS_SUSPENDED) {
             throw new \Box_Exception('Only suspended orders can be unsuspended');
         }
 
@@ -213,7 +213,7 @@ class Admin extends \Api_Abstract
     public function uncancel($data)
     {
         $order = $this->_getOrder($data);
-        if (\Model_ClientOrder::STATUS_CANCELED != $order->status) {
+        if ($order->status != \Model_ClientOrder::STATUS_CANCELED) {
             throw new \Box_Exception('Only canceled orders can be uncanceled');
         }
 
@@ -454,6 +454,7 @@ class Admin extends \Api_Abstract
     public function export_csv($data)
     {
         $data['headers'] ??= [];
+
         return $this->getService()->exportCSV($data['headers']);
     }
 }

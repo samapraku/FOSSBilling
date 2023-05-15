@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -179,7 +179,7 @@ class Admin extends \Api_Abstract
         $this->di['validator']->checkRequiredParamsForArray($required, $data);
 
         $tld = $data['tld'];
-        if ('.' != $tld[0]) {
+        if ($tld[0] != '.') {
             $tld = '.' . $tld;
         }
 
@@ -190,7 +190,7 @@ class Admin extends \Api_Abstract
 
         return $this->getService()->tldToApiArray($model);
     }
-    
+
     /**
      * Get top level domain details by id.
      *
@@ -200,7 +200,6 @@ class Admin extends \Api_Abstract
      *
      * @throws \Box_Exception
      */
-     
     public function tld_get_id($data)
     {
         $required = [

@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -34,7 +34,7 @@ class Admin extends \Api_Abstract
         ];
         $this->di['validator']->checkRequiredParamsForArray($required, $data);
 
-        if (isset($data['type']) && ('horizontal' != strtolower($data['type']) || 'default' != strtolower($data['type']))) {
+        if (isset($data['type']) && (strtolower($data['type']) != 'horizontal' || strtolower($data['type']) != 'default')) {
             throw new \Box_Exception('Form style was not found in predefined list', null, 3657);
         }
 
@@ -307,7 +307,7 @@ class Admin extends \Api_Abstract
      */
     public function update_form_settings($data)
     {
-        if (!isset($data['form_id']) || ('' == trim($data['form_id']))) {
+        if (!isset($data['form_id']) || (trim($data['form_id']) == '')) {
             throw new \Box_Exception('Form id was not passed', null, 1654);
         }
         if (!isset($data['form_name'])) {
@@ -318,7 +318,7 @@ class Admin extends \Api_Abstract
             throw new \Box_Exception('Form type was not passed', null, 3794);
         }
 
-        if ('horizontal' != $data['type'] && 'default' != $data['type']) {
+        if ($data['type'] != 'horizontal' && $data['type'] != 'default') {
             throw new \Box_Exception('Field type not supported', null, 3207);
         }
 

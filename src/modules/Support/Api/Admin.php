@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -160,7 +160,7 @@ class Admin extends \Api_Abstract
 
         $ticket = $this->di['db']->getExistingModelById('SupportTicket', $data['id'], 'Ticket not found');
 
-        if (\Model_SupportTicket::CLOSED == $ticket->status) {
+        if ($ticket->status == \Model_SupportTicket::CLOSED) {
             return true;
         }
 

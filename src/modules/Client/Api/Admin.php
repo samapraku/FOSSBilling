@@ -2,7 +2,7 @@
 /**
  * Copyright 2022-2023 FOSSBilling
  * Copyright 2011-2021 BoxBilling, Inc.
- * SPDX-License-Identifier: Apache-2.0
+ * SPDX-License-Identifier: Apache-2.0.
  *
  * @copyright FOSSBilling (https://www.fossbilling.org)
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache-2.0
@@ -18,14 +18,12 @@ class Admin extends \Api_Abstract
 {
     /**
      * Get a list of clients.
-     * 
-     * @param array $data Filtering options.
-     * 
-     * @param string $data['status'] [optional] Filter clients by status. Available options: 'active', 'suspended', 'canceled'.
-     * 
-     * @param int $data['per_page'] [optional] Number of clients to display per page.
-     * 
-     * @return array List of clients in a paginated manner.
+     *
+     * @param array  $data             filtering options
+     * @param string $data['status']   [optional] Filter clients by status. Available options: 'active', 'suspended', 'canceled'.
+     * @param int    $data['per_page'] [optional] Number of clients to display per page
+     *
+     * @return array list of clients in a paginated manner
      */
     public function get_list($data)
     {
@@ -43,11 +41,10 @@ class Admin extends \Api_Abstract
 
     /**
      * Get a list of clients.
-     * 
-     * @param array $data Filtering options
-     * 
-     * @param int $data['per_page'] [optional] Number of clients to display per page.
-     * 
+     *
+     * @param array $data             Filtering options
+     * @param int   $data['per_page'] [optional] Number of clients to display per page
+     *
      * @return array List of clients in a paginated manner
      */
     public function get_pairs($data)
@@ -258,7 +255,7 @@ class Admin extends \Api_Abstract
         }
         $this->di['validator']->isBirthdayValid($data['birthday'] ?? null);
 
-        if (($data['currency'] ?? null) && $service->canChangeCurrency($client, ($data['currency'] ?? null))) {
+        if (($data['currency'] ?? null) && $service->canChangeCurrency($client, $data['currency'] ?? null)) {
             $client->currency = $data['currency'] ?? $client->currency;
         }
 
@@ -665,6 +662,7 @@ class Admin extends \Api_Abstract
     public function export_csv($data)
     {
         $data['headers'] ??= [];
+
         return $this->getService()->exportCSV($data['headers']);
     }
 }
